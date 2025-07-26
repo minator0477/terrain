@@ -32,12 +32,16 @@ for csv_file in csv_files:
     min_time = df['time'].min()
     max_time = df['time'].max()
     mean_time = min_time + (max_time - min_time) / 2
+    max_elevation = df['elevation'].max()
+    min_elevation = df['elevation'].min()
 
     properties.append({
         'filename': fname,
         'min_time': min_time.strftime('%Y-%m-%d %H:%M:%S'),
         'max_time': max_time.strftime('%Y-%m-%d %H:%M:%S'),
         'datetime': mean_time.strftime('%Y-%m-%d %H:%M:%S'),
+        'min_elevation': min_elevation,
+        'max_elevation': max_elevation, 
     })
 
 # GeoDataFrame化

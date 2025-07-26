@@ -8,6 +8,9 @@ geojson_path = './geojson/meizan.geojson'
 # CSV読み込み
 df = pd.read_csv(csv_path, encoding='utf-8')
 
+# NaNをNoneに変換 (→nullに出力される）
+df = df.where(pd.notnull(df), None)
+
 features = []
 for _, row in df.iterrows():
     try:
@@ -18,6 +21,11 @@ for _, row in df.iterrows():
 
     # プロパティには緯度・経度以外を含める
     props = row.drop(labels=['北緯', '東経']).to_dict()
+
+
+    # 列名を変更: '標高（m）' → '標高'
+    if '標高（m）' in props:
+        props['標高'] = props.pop('標高（m）')
 
     feature = {
         "type": "Feature",
