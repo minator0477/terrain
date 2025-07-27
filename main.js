@@ -1,5 +1,6 @@
 // ./main.js
 // Maplibre GL JSの読み込み
+/*
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -9,6 +10,10 @@ import 'maplibre-gl-opacity/dist/maplibre-gl-opacity.css';
 
 // 地理院標高タイルをMaplibre gs jsで利用するためのモジュール
 import { useGsiTerrainSource } from 'maplibre-gl-gsi-terrain';
+*/
+	import maplibregl from "https://cdn.jsdelivr.net/npm/maplibre-gl@3.6.1/+esm";
+	import OpacityControl from "https://cdn.jsdelivr.net/npm/maplibre-gl-opacity@1.2.1/+esm";
+	import { useGsiTerrainSource } from "https://cdn.jsdelivr.net/npm/maplibre-gl-gsi-terrain@1.0.1/+esm";
 
 const map = new maplibregl.Map({
 	container: 'map', //div要素のid
