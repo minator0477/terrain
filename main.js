@@ -48,6 +48,13 @@ const map = new maplibregl.Map({
         tileSize: 256,
         attribution: "地図の出典：<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>",
       },
+      // 地理院陰影起伏図
+      shade: {
+        type: 'raster',
+        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/hillshademap/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        attribution: "地図の出典：<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>",
+      },
 
 		},
 		layers: [
@@ -80,6 +87,12 @@ const map = new maplibregl.Map({
         layout: {
           visibility: 'none',
         },
+      },
+      {
+        id: 'shade-layer',
+        type: 'raster',
+        source: 'shade',
+        layout: { visibility: 'none', },
       },
 
 		]
@@ -197,6 +210,7 @@ map.on('load', () => {
 			'std-layer': '地理院標準地図',
 			'pale-layer': '淡色地図',
 			'altitude-layer': '標高図',
+			'shade-layer': '陰影起伏図',
 			/*
 			'meizan-class-layer': '山頂（種別）',
 			'meizan-elevation-layer': '山頂（標高）',
