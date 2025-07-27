@@ -2,49 +2,65 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <title>GSI Terrain DEM on MapLibre</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- MapLibre CSS -->
+  <title>MapLibre + GSI Terrain DEM (@latest版)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@3.6.1/dist/maplibre-gl.css" rel="stylesheet" />
-  <!-- OpacityControl CSS -->
   <link href="https://cdn.jsdelivr.net/npm/maplibre-gl-opacity@1.2.1/dist/maplibre-gl-opacity.css" rel="stylesheet" />
-
   <style>
-    body, html { margin: 0; padding: 0; height: 100%; }
-    #map { width: 100%; height: 100%; }
+    html, body, #map { margin: 0; padding: 0; height: 100%; }
   </style>
 </head>
 <body>
   <div id="map"></div>
 
-  <!-- MapLibre JS -->
   <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
-  <!-- OpacityControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/maplibre-gl-opacity@1.2.1/dist/maplibre-gl-opacity.umd.js"></script>
-  <!-- GSI Terrain JS（UMD形式） -->
-  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl-gsi-terrain@1.0.1/dist/useGsiTerrainSource.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl-gsi-terrain@latest/dist/useGsiTerrainSource.umd.js"></script>
 
   <script>
+    // グローバル変数の存在を確認して取得
+    const useGsiTerrainSource = window.MaplibreGlGsiTerrain?.useGsiTerrainSource;
+    if (!useGsiTerrainSource) {
+      alert("maplibre-gl-gsi-terrain が読み込まれていません！");
+    }
+
     const map = new maplibregl.Map({
       container: 'map',
-      center: [139.767, 35.681], // 東京駅
+      center: [139.767, 35.681], // 東京駅あたり
       zoom: 10,
       pitch: 60,
       bearing: -10,
       style: {
         version: 8,
-        sources: {},
-        layers: []
+        sources: {
+          gsi: {
+            type: 'raster',
+            tiles: ['https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '地理院地図',
+          },
+        },
+        layers: [
+          {
+            id: 'gsi-std',
+            type: 'raster',
+            source: 'gsi',
+            minzoom: 0,
+            maxzoom: 18,
+          },
+        ],
       },
-      terrain: { source: 'gsi-dem', exaggeration: 1.5 }
+      terrain: {
+        source: 'gsi-dem',
+        exaggeration: 1.5,
+      },
     });
 
-    // 地理院DEM（GSI Terrain）追加
-    useGsiTerrainSource(map); // UMDでは global関数として利用可
+    if (useGsiTerrainSource) {
+      useGsiTerrainSource(map);
+    }
 
-    // OpacityControl追加（レイヤーなしでも出せる）
-    map.addControl(new OpacityControl({ layers: [], label: '透過度' }), 'top-right');
+    map.addControl(new OpacityControl({ layers: ['gsi-std'], label: '透過度' }), 'top-right');
   </script>
 </body>
 </html>
