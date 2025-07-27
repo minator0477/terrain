@@ -101,15 +101,16 @@ map.on('load', () => {
     source: 'meizan',
 		paint: {
 			'circle-radius': 5,
-			'circle-color': 'gray',
-			'circle-stroke-color': [
+			'circle-color': [
 				'case',
 				['==', ['get', 'クラス'], '百名山'], 'red',
 				['==', ['get', 'クラス'], '二百名山'], 'blue',
 				['==', ['get', 'クラス'], '三百名山'], 'green',
 				'gray'
 			],
-			'circle-stroke-width': 2  
+			'circle-stroke-color': 'white',
+			'circle-stroke-width': 1,
+			'circle-opacity': 1.0
 		},
   });
 
@@ -119,13 +120,12 @@ map.on('load', () => {
 		type: 'circle',
 		source: 'meizan', // 事前にaddSourceしていると仮定
 		paint: {
-			'circle-radius': 6.0,
-			'circle-stroke-color': 'black',
-			'circle-stroke-width': 2,
+			'circle-radius': 5.0,
+			'circle-stroke-width': 1,
 			'circle-color': [
 				'interpolate',
 				['linear'],
-				['to-number', ['get', '標高（m）'], 0],  // ← 文字列から数値へ変換、失敗時は 0
+				['to-number', ['get', '標高'], 0],  // ← 文字列から数値へ変換、失敗時は 0
 				0, 'gray',       // 0m 以下：青緑
 				500,  '#2c7fb8',     // 500m：水色
 				1000, '#41ab5d',    // 1000m：青
@@ -144,16 +144,26 @@ map.on('load', () => {
 		source: 'meizan', // 事前にaddSourceしていると仮定
 		paint: {
 			'circle-radius': 6.0,
-			'circle-stroke-color': 'black',
-			'circle-stroke-width': 2,
+			'circle-stroke-color': 'white',
+			'circle-stroke-width': [
+				'step',
+				['zoom'],
+				1.0,   // ズームレベル 0〜10 の stroke-width
+				6, 1.5,   // ズーム 10以上で1.0
+				10, 3.0,   // ズーム 13以上で1.5
+			],
+			// 'circle-stroke-width': 1.5,
+			'circle-opacity': 1.0, 
 			'circle-color': [
 				'interpolate',
 				['linear'],
 				['to-number', ['get', 'カウント'], 0],  // ← 文字列から数値へ変換、失敗時は 0
-				0, 'gray',       // 0m 以下：青緑
-				1, '#669EC4',    // 1000m：青
-				2, '#8B88B6',    // 1500m：紫
-				4, '#FF0000'     // 3000m以上：赤
+				0,    'gray',       //      # < 1
+				1,    '#6baed6',    // 1 <= # < 2
+				2,    '#2171b5',    // 2 <= # < 3
+				3,    '#bbdf26',    // 3 <= # < 4
+				5,    '#fdae61',    // 4 <= # < 5
+				1000, '#f03b20',    // 5 <= # < 1000
 			],
 		},
 		layout: { visibility: 'none', },
