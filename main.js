@@ -104,7 +104,7 @@ map.on('load', () => {
 	// ◯百名山ソース追加
 	map.addSource('meizan', {
     type: 'geojson',
-    data: './data/meizan/geojson/meizan.geojson'
+    data: './public/data/meizan/geojson/meizan.geojson'
   });
 
 	// ○百名山クラス追加（種別）
@@ -186,7 +186,7 @@ map.on('load', () => {
 	// trackソース追加
 	map.addSource('track', {
     type: 'geojson',
-    data: './data/track/geojson/tracks.geojson'
+    data: './public/data/track/geojson/tracks.geojson'
   });
 
 	 // ラインレイヤー追加
