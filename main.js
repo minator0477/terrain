@@ -10,11 +10,15 @@ import 'maplibre-gl-opacity/dist/maplibre-gl-opacity.css';
 // 地理院標高タイルをMaplibre gs jsで利用するためのモジュール
 import { useGsiTerrainSource } from 'maplibre-gl-gsi-terrain';
 
+// jQueryを使えるように
+import $ from 'jquery';
+
+
 const map = new maplibregl.Map({
 	container: 'map', //div要素のid
 	zoom: 5, //初期表示のズーム
 	minZoom: 5, //最小ズーム
-	maxZomm: 18,
+	maxZoom: 18,
 	maxBounds : [122, 20, 154, 50],
 	style: {
 		version: 8,
@@ -98,6 +102,36 @@ const map = new maplibregl.Map({
 		]
 	}
 });
+
+// LegendControlクラス定義
+class LegendControl {
+  onAdd(map) {
+    this._map = map;
+    // jQueryで要素作成
+    const $container = $('<div class="legend-container">');
+    const $header = $('<div class="legend-header">凡例 ▼</div>');
+    const $body = $('<div class="legend-body">凡例内容がここに入ります</div>').hide();
+
+    // ヘッダークリックで開閉切替
+    $header.on('click', () => {
+      $body.slideToggle();
+      $header.toggleClass('open');
+      $header.text($header.hasClass('open') ? '凡例 ▲' : '凡例 ▼');
+    });
+
+    $container.append($header, $body);
+
+    this._container = $container[0];
+    return this._container;
+  }
+
+  onRemove() {
+    this._container.remove();
+    this._map = undefined;
+  }
+}
+
+
 // マップの初期ロード完了時に発火するイベントを検知する
 map.on('load', () => {
 
@@ -151,7 +185,7 @@ map.on('load', () => {
   });
 
 	// ○百名山カウントレイヤー追加
-  map.addLayer({
+	map.addLayer({
 		id: 'meizan-count-layer',
 		type: 'circle',
 		source: 'meizan', // 事前にaddSourceしていると仮定
@@ -211,11 +245,6 @@ map.on('load', () => {
 			'pale-layer': '淡色地図',
 			'altitude-layer': '標高図',
 			'shade-layer': '陰影起伏図',
-			/*
-			'meizan-class-layer': '山頂（種別）',
-			'meizan-elevation-layer': '山頂（標高）',
-			'meizan-count-layer': '山頂（カウント）',
-			*/
 		}
 	});
 	map.addControl(opacityBaseLayer, 'top-left'); // 第二引数で場所を指定できる
@@ -225,75 +254,75 @@ map.on('load', () => {
 			'meizan-class-layer': '山頂（種別）',
 			'meizan-elevation-layer': '山頂（標高）',
 			'meizan-count-layer': '山頂（カウント）',
-			'track-layer': 'トラック',
+			// 'track-layer': 'トラック',
 		},
 		showCheckbox: false,  // ← チェックボックスではなくラジオボタン風に
 	});
 	map.addControl(opacityMeizan, 'top-left');
 
-// 地図上をクリックした際のイベント
-    map.on('click', (e) => {
-        const buffer = 10;
-        const bbox = [
-            [e.point.x - buffer, e.point.y - buffer],
-            [e.point.x + buffer, e.point.y + buffer],
-        ];
-        // クリック箇所に指定緊急避難場所レイヤーが存在するかどうかをチェック
-        const features = map.queryRenderedFeatures(bbox, {
+	// 地図上をクリックした際のイベント
+	map.on('click', (e) => {
+			const buffer = 10;
+			const bbox = [
+					[e.point.x - buffer, e.point.y - buffer],
+					[e.point.x + buffer, e.point.y + buffer],
+			];
+			// クリック箇所に指定緊急避難場所レイヤーが存在するかどうかをチェック
+			const features = map.queryRenderedFeatures(bbox, {
 
-            layers: [
-                'meizan-class-layer',
-                'meizan-elevation-layer',
-                'meizan-count-layer',
-                'track-layer',
-            ],
-        });
-        if (features.length === 0) return; // 地物がなければ処理を終了
+					layers: [
+							'meizan-class-layer',
+							'meizan-elevation-layer',
+							'meizan-count-layer',
+							'track-layer',
+					],
+			});
+			if (features.length === 0) return; // 地物がなければ処理を終了
 
-        // 地物があればポップアップを表示する
-        const feature = features[0]; // 複数の地物が見つかっている場合は最初の要素を用いる
+			// 地物があればポップアップを表示する
+			const feature = features[0]; // 複数の地物が見つかっている場合は最初の要素を用いる
 
-        // ポップアップの表示位置を決定
-        let lngLat;
-        const geom = feature.geometry;
+			// ポップアップの表示位置を決定
+			let lngLat;
+			const geom = feature.geometry;
 
-        if (geom.type === 'Point') {
-            lngLat = geom.coordinates;
-        } else if (geom.type === 'LineString') {
-            const coords = geom.coordinates;
-            const midIndex = Math.floor(coords.length / 2);
-            lngLat = coords[midIndex]; // 中央の点を使う
-        } else if (geom.type === 'Polygon') {
-            const coords = geom.coordinates[0]; // 外周リング
-            const midIndex = Math.floor(coords.length / 2);
-            lngLat = coords[midIndex];
-        } else {
-             console.warn('対応していないジオメトリタイプ:', geom.type);
-             return;
-        }
+			if (geom.type === 'Point') {
+					lngLat = geom.coordinates;
+			} else if (geom.type === 'LineString') {
+					const coords = geom.coordinates;
+					const midIndex = Math.floor(coords.length / 2);
+					lngLat = coords[midIndex]; // 中央の点を使う
+			} else if (geom.type === 'Polygon') {
+					const coords = geom.coordinates[0]; // 外周リング
+					const midIndex = Math.floor(coords.length / 2);
+					lngLat = coords[midIndex];
+			} else {
+					 console.warn('対応していないジオメトリタイプ:', geom.type);
+					 return;
+			}
 
-        // ポップアップ表示（ここではnameプロパティを表示する例）
-        const layerId = feature.layer.id;
-        let html_str = null;
-        if (layerId != 'track-layer'){
-            html_str = `
-                <div>山名： <strong>${feature.properties.山名}</strong> </div>
-                <div>標高： <strong>${feature.properties.標高}</strong>[m] </div>
-                <div>種別： <strong>${feature.properties.クラス}</strong> </div>
-                <div>カウント： <strong>${feature.properties.カウント}</strong> </div>
-            `;
-        }else{
-            html_str = `
-                <div>計画名： <strong>${feature.properties.filename}</strong> </div>
-                <div>日時： <strong>${feature.properties.min_time} ~ ${feature.properties.max_time}</strong> </div>
-                <div>標高： <strong>${feature.properties.min_elevation} ~ ${feature.properties.max_elevation}</strong>[m] </div>
-            `;
-				}
-        new maplibregl.Popup()
-            .setLngLat(lngLat)
-            .setHTML(html_str)
-            .addTo(map);
-    });
+			// ポップアップ表示（ここではnameプロパティを表示する例）
+			const layerId = feature.layer.id;
+			let html_str = null;
+			if (layerId != 'track-layer'){
+					html_str = `
+							<div>山名： <strong>${feature.properties.山名}</strong> </div>
+							<div>標高： <strong>${feature.properties.標高}</strong>[m] </div>
+							<div>種別： <strong>${feature.properties.クラス}</strong> </div>
+							<div>カウント： <strong>${feature.properties.カウント}</strong> </div>
+					`;
+			}else{
+					html_str = `
+							<div>計画名： <strong>${feature.properties.filename}</strong> </div>
+							<div>日時： <strong>${feature.properties.min_time} ~ ${feature.properties.max_time}</strong> </div>
+							<div>標高： <strong>${feature.properties.min_elevation} ~ ${feature.properties.max_elevation}</strong>[m] </div>
+					`;
+			}
+			new maplibregl.Popup()
+					.setLngLat(lngLat)
+					.setHTML(html_str)
+					.addTo(map);
+	});
 
 
 	// 地形データ生成（地理院標高タイル）
@@ -327,6 +356,25 @@ map.on('load', () => {
 	map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-right');
 
 
-
-
 });
+/*
+
+console.log($legendBody.length);
+*/
+
+$(document).ready(function () {
+	$('.legend-body').hide();
+  $('.legend-header').on('click', function () {
+    const $body = $(this).next('.legend-body');
+    const isVisible = $body.is(':visible');
+
+    // 開閉処理
+    $body.slideToggle();
+
+    // ヘッダーの▼/▲を切り替え
+    const headerText = $(this).text();
+    const updatedText = headerText.replace(isVisible ? '▲' : '▼', isVisible ? '▼' : '▲');
+    $(this).text(updatedText);
+  });
+});
+
