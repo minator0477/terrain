@@ -11,7 +11,7 @@ import 'maplibre-gl-opacity/dist/maplibre-gl-opacity.css';
 import { useGsiTerrainSource } from 'maplibre-gl-gsi-terrain';
 
 // jQueryを使えるように
-import $ from 'jquery';
+// import $ from 'jquery';
 
 
 const map = new maplibregl.Map({
