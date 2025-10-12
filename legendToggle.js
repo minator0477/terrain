@@ -1,4 +1,3 @@
-import $ from "jquery";
 
 export function setupLegendToggle(){
     $(document).ready(function () {
