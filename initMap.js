@@ -58,36 +58,36 @@ export function initMap() {
                     source: 'osm',
                     type: 'raster',
                 },
-          {
-            // 一意のレイヤID
-            id: 'pale-layer',
-            // レイヤの種類。background、fill、line、symbol、raster、circle、fill-extrusion、heatmap、hillshade のいずれか
-            type: 'raster',
-            // データソースの指定
-            source: 'pale',
-            layout: { visibility: 'none', },
-          },
-          {
-            id: 'std-layer',
-            type: 'raster',
-            source: 'std',
-            layout: { visibility: 'none', },
-          },
-          {
-            id: 'altitude-layer',
-            type: 'raster',
-            source: 'altitude',
-            paint: {'raster-opacity': 0.3},
-            layout: {
-              visibility: 'none',
-            },
-          },
-          {
-            id: 'shade-layer',
-            type: 'raster',
-            source: 'shade',
-            layout: { visibility: 'none', },
-          },
+                {
+                    // 一意のレイヤID
+                    id: 'pale-layer',
+                    // レイヤの種類。background、fill、line、symbol、raster、circle、fill-extrusion、heatmap、hillshade のいずれか
+                    type: 'raster',
+                    // データソースの指定
+                    source: 'pale',
+                    layout: { visibility: 'none', },
+                },
+                {
+                    id: 'std-layer',
+                    type: 'raster',
+                    source: 'std',
+                    layout: { visibility: 'none', },
+                },
+                {
+                    id: 'altitude-layer',
+                    type: 'raster',
+                    source: 'altitude',
+                    paint: {'raster-opacity': 0.3},
+                    layout: {
+                      visibility: 'none',
+                    },
+                },
+                {
+                    id: 'shade-layer',
+                    type: 'raster',
+                    source: 'shade',
+                    layout: { visibility: 'none', },
+                },
 
             ]
         }

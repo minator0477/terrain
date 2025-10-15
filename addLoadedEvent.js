@@ -243,6 +243,171 @@ function addClickEvent(map){
 }
 
 
+function switchLayer(map) {
+  // select要素を取得
+  const select = document.getElementById("information");
+
+  // 選択が変わったときの処理
+  select.addEventListener("change", () => {
+    const layers = ["classname", "elevation", "count"];
+    const layerDict = {"classname": "meizan-class-layer", "elevation": "meizan-elevation-layer", "count": "meizan-count-layer" };
+
+    const selectedValue = select.value;       // value属性の値
+    const selectedLayer = select.value;       // value属性の値
+    const selectedText = select.options[select.selectedIndex].text; // 表示テキスト
+
+    layers.forEach((layer, index) => {
+        map.setLayoutProperty(layerDict[layer], "visibility", "none");
+        // console.log(layer, layerDict[layer]);
+    });
+
+    map.setLayoutProperty(layerDict[selectedLayer], "visibility", "visible");
+    // console.log("選択された値:", selectedValue);
+    // console.log("表示テキスト:", selectedText);
+  });
+
+/*
+    // すべてのレイヤーを出力
+    const layers = map.getStyle().layers;
+    layers.forEach(layer => {
+      console.log(layer.id);
+    });
+*/
+
+}
+
+  // 3️⃣ レイヤー情報を定義
+      const meizanLayers = [
+        { value: "meizan-class-layer", label: "百/二百/三百名山" },
+        { value: "meizan-elevation-layer", label: "標高" },
+        { value: "meizan-count-layer", label: "登頂回数" }
+      ];
+      const basemapLayers = [
+        { value: "std-layer", label: "地理院標準地図" },
+        { value: "pale-layer", label: "淡色図" },
+        { value: "altitude-layer", label: "標高図" },
+        { value: "shade-layer", label: "陰影起伏図" }
+      ];
+
+  // 2️⃣ 自作コントロール（ラジオボタン版）
+  class MeizanLayerControl {
+    constructor(layers, instanceId) {
+      this._container = null;
+      this._layers = layers; // { value: layerId, label: 表示テキスト }
+      this._instanceId = instanceId || Math.random().toString(36).substr(2, 9) //ユニークID生成
+    }
+
+    onAdd(map) {
+      this._map = map;
+
+      this._container = document.createElement("div");
+      this._container.className = "maplibregl-ctrl maplibregl-ctrl-group";
+      this._container.style.background = "rgba(230, 230, 230, 0.9)";
+      // this._container.style.padding = "5px";
+      this._container.style.margin = "5px";
+
+      // ラジオボタン作成
+      this._layers.forEach((item, index) => {
+        const label = document.createElement("label");
+        label.style.display = "block";
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "layer-select-" + this._instanceId; // nameにユニークIDを付与して独立させる
+        radio.value = item.value;
+
+        // デフォルトで1つ目を選択
+        if (index === 0) radio.checked = true; //インデックスで判定するように変更
+
+        radio.addEventListener("change", () => {
+          this._layers.forEach(l => {
+            const layerId = l.value;
+            if (map.getLayer(layerId)) {
+              map.setLayoutProperty(layerId, "visibility", "none");
+            }
+          });
+          // 選択されたレイヤーだけ visible
+          if (map.getLayer(radio.value)) {
+            map.setLayoutProperty(radio.value, "visibility", "visible");
+          }
+        });
+
+        console.log(radio.value);
+
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(" " + item.label));
+        this._container.appendChild(label);
+      });
+
+    
+
+      return this._container;
+    }
+
+    notShow() {
+        this._container.style.display = "none"; // 非表示にする
+    }
+  }
+
+
+  class BasemapLayerControl {
+    constructor(layers, instanceId) {
+      this._container = null;
+      this._layers = layers; // { value: layerId, label: 表示テキスト }
+      this._instanceId = instanceId || Math.random().toString(36).substr(2, 9) //ユニークID生成
+    }
+
+    onAdd(map) {
+      this._map = map;
+
+      this._container = document.createElement("div");
+      this._container.className = "maplibregl-ctrl maplibregl-ctrl-group";
+      this._container.style.background = "rgba(230, 230, 230, 0.9)";
+      // this._container.style.padding = "5px";
+      this._container.style.margin = "5px";
+
+      // ラジオボタン作成
+      this._layers.forEach((item, index) => {
+        const label = document.createElement("label");
+        label.style.display = "block";
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "layer-select-" + this._instanceId; // nameにユニークIDを付与して独立させる
+        radio.value = item.value;
+
+        // デフォルトで1つ目を選択
+        if (index === 0) radio.checked = true; //インデックスで判定するように変更
+
+        radio.addEventListener("change", () => {
+          this._layers.forEach(l => {
+            const layerId = l.value;
+            if (map.getLayer(layerId)) {
+              map.setLayoutProperty(layerId, "visibility", "none");
+            }
+          });
+          // 選択されたレイヤーだけ visible
+          if (map.getLayer(radio.value)) {
+            map.setLayoutProperty(radio.value, "visibility", "visible");
+          }
+        });
+
+        console.log(radio.value);
+
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(" " + item.label));
+        this._container.appendChild(label);
+      });
+
+    
+
+      return this._container;
+    }
+
+    notShow() {
+        this._container.style.display = "none"; // 非表示にする
+    }
+  }
 export function addLoadedEvent(map) {
     // マップの初期ロード完了時に発火するイベントを検知する
     map.on('load', () => {
@@ -250,11 +415,22 @@ export function addLoadedEvent(map) {
         addMeizanLayer(map);
         addTrackSource(map);
         addTrackLayer(map);
-        addControlBaselayer(map);
-        addControlMeizanlayer(map);
+        // addControlBaselayer(map);
+        // switchLayer(map);
+        // addControlMeizanlayer(map);
         addTerrainSource(map);
         addTerrainLayer(map);
         addClickEvent(map);
+
+
+    // 4️⃣ 地図ロード後にコントロールを任意のdivに追加
+    const layerControlBasemap = new BasemapLayerControl(basemapLayers);
+    const containerBasemap = document.getElementById("basemap-control-container");
+    containerBasemap.appendChild(layerControlBasemap.onAdd(map));
+
+    const layerControlMeizan = new MeizanLayerControl(meizanLayers);
+    const containerMeizan = document.getElementById("meizan-control-container");
+    containerMeizan.appendChild(layerControlMeizan.onAdd(map));
 
         // 3D表示の切り替え
         map.addControl(
