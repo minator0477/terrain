@@ -6,18 +6,29 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 		<title>鳥瞰図</title>
-    <script type="module" crossorigin src="/assets/index.01857e2d.js"></script>
+    <script type="module" crossorigin src="/assets/index.87af8b4d.js"></script>
     <link rel="stylesheet" href="/assets/index.13a062fa.css">
   </head>
   <body style="margin:0">
     <div id="map" style="height:100vh; position: relative; z-index: 1;"><!-- 地図描画用のdiv要素を作成 -->
 		<!-- 地図の凡例 -->
+        <div id="my-control-container" style="position:absolute; top:10px; left:10px; z-index:1; background: rgba(255, 255, 255, 1.0)">
+            <h2 style="margin:0; padding:0">  MENU</h2>
+            <div class="">
+                <h3 style="margin:0; padding:0;"> &#8801; 背景地図</h3>
+            </div>
+            <div id="basemap-control-container"></div>
+            <hr>
+            <div class="">
+                <h3 style="margin:0; padding: 0;"> &#8801; 名山で可視化したい情報</h3>
+            </div>
+            <div id="meizan-control-container"></div>
+        </div>
+
 			<div class="legend-container" style="position: absolute; bottom: 10px; left: 10px; z-index: 99; background: rgba(255, 255, 255, 0.9); padding: 10px; border: 1px solid #aaa; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); fontsize: 14px">
-			<h2>凡例</h2>
-			<!--
-			-->
-				<div class="legend-section">
-					<div class="legend-header"><strong>種別 ▼</strong></div>
+            <h2 style="padding:0; margin:0;">凡例</h2>
+				<div id="legend-section">
+					<div class="legend-header"><strong>分類</strong></div>
 					<div class="legend-body">
 						<span style="color:red;">●</span> 百名山<br>
 						<span style="color:blue;">●</span> 二百名山<br>
@@ -26,6 +37,7 @@
 				</div>
 				<hr>
 
+<!--
 				<div class="legend-section">
 					<div class="legend-header"><strong>標高 ▼</strong></div>
 					<div class="legend-body">
@@ -51,7 +63,7 @@
 					</div>
 				</div>
 				<hr>
-
+-->
 				<div class="legend-item" style="display: flex; align-items: center; gap: 8px; font-size:14px;">
 					<div class="legend-line" style="width: 30px; height: 2px; background-color: red"></div>
 					<span>トラック</span>

@@ -16,4 +16,4 @@ import { addLoadedEvent } from './addLoadedEvent.js';
 
 const map = initMap();
 addLoadedEvent(map);
-setupLegendToggle();
+// setupLegendToggle();

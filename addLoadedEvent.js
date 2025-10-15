@@ -291,6 +291,7 @@ function switchLayer(map) {
 
   // 2️⃣ 自作コントロール（ラジオボタン版）
   class MeizanLayerControl {
+    static _legendId = "legend-section";
     constructor(layers, instanceId) {
       this._container = null;
       this._layers = layers; // { value: layerId, label: 表示テキスト }
@@ -329,10 +330,10 @@ function switchLayer(map) {
           // 選択されたレイヤーだけ visible
           if (map.getLayer(radio.value)) {
             map.setLayoutProperty(radio.value, "visibility", "visible");
+            this._setLegend(radio.value);
           }
         });
 
-        console.log(radio.value);
 
         label.appendChild(radio);
         label.appendChild(document.createTextNode(" " + item.label));
@@ -346,6 +347,53 @@ function switchLayer(map) {
 
     notShow() {
         this._container.style.display = "none"; // 非表示にする
+    }
+
+
+    _getLegend(layerName) {
+        if (layerName === "meizan-class-layer") {
+            return `
+                <div class="legend-header"><strong>分類</strong></div>
+                <div class="legend-body">
+                    <span style="color:red;">●</span> 百名山<br>
+                    <span style="color:blue;">●</span> 二百名山<br>
+                    <span style="color:green;">●</span> 三百名山<br>
+                </div>
+                `
+        }
+        if (layerName === "meizan-elevation-layer") {
+            return `
+                <div class="legend-header"><strong>標高</strong></div>
+                <div class="legend-body">
+                    <span style="color:gray;">●</span> 0m<br>
+                    <span style="color:#2c7fb8;">●</span> 500m<br>
+                    <span style="color:#41ab5d;">●</span> 1000m<br>
+                    <span style="color:#fdae61;">●</span> 1500m<br>
+                    <span style="color:#f46d43;">●</span> 2000m<br>
+                    <span style="color:#d73027;">●</span> 3000m以上
+                </div>
+
+            `
+        }
+        if (layerName === "meizan-count-layer") {
+            return `
+                <div class="legend-header"><strong>登頂回数</strong></div>
+                <div class="legend-body">
+                    <span style="color:gray;">●</span> 0<br>
+                    <span style="color:#6baed6;">●</span> 1<br>
+                    <span style="color:#2171b5;">●</span> 2<br>
+                    <span style="color:#bbdf26;">●</span> 3<br>
+                    <span style="color:#fdae61;">●</span> 4<br>
+                    <span style="color:#f03b20;">●</span> 5以上
+                </div>
+            `
+        }
+    }
+
+    _setLegend(layerName, elementId) {
+            const container = document.getElementById(MeizanLayerControl._legendId);
+            const legendHTML = this._getLegend(layerName);
+            container.innerHTML = legendHTML;
     }
   }
 
@@ -392,7 +440,6 @@ function switchLayer(map) {
           }
         });
 
-        console.log(radio.value);
 
         label.appendChild(radio);
         label.appendChild(document.createTextNode(" " + item.label));
@@ -407,6 +454,7 @@ function switchLayer(map) {
     notShow() {
         this._container.style.display = "none"; // 非表示にする
     }
+
   }
 export function addLoadedEvent(map) {
     // マップの初期ロード完了時に発火するイベントを検知する
@@ -431,6 +479,7 @@ export function addLoadedEvent(map) {
     const layerControlMeizan = new MeizanLayerControl(meizanLayers);
     const containerMeizan = document.getElementById("meizan-control-container");
     containerMeizan.appendChild(layerControlMeizan.onAdd(map));
+    // console.log(layerControlMeizan.setLegend("meizan-elevation-layer", "legend-section"));
 
         // 3D表示の切り替え
         map.addControl(

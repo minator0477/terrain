@@ -24,19 +24,9 @@
         </div>
 
 			<div class="legend-container" style="position: absolute; bottom: 10px; left: 10px; z-index: 99; background: rgba(255, 255, 255, 0.9); padding: 10px; border: 1px solid #aaa; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); fontsize: 14px">
-<!--
-            <h2>MENU</h2>
-            <label for="information"><strong>山頂レイヤーを選択してください</strong></label>
-            <br>
-            <select id="information" name="information">
-                <option value="classname">百/二百/三百名山</option>
-                <option value="elevation">標高</option>
-                <option value="count">登頂回数</option>
-            </select>
-            <hr>
-            <h2>凡例</h2>
-				<div class="legend-section">
-					<div class="legend-header"><strong>種別 ▼</strong></div>
+            <h2 style="padding:0; margin:0;">凡例</h2>
+				<div id="legend-section">
+					<div class="legend-header"><strong>分類</strong></div>
 					<div class="legend-body">
 						<span style="color:red;">●</span> 百名山<br>
 						<span style="color:blue;">●</span> 二百名山<br>
@@ -45,6 +35,7 @@
 				</div>
 				<hr>
 
+<!--
 				<div class="legend-section">
 					<div class="legend-header"><strong>標高 ▼</strong></div>
 					<div class="legend-body">
