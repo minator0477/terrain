@@ -1,6 +1,5 @@
 import { Mountain, MountainList } from "./mountain.js"; // 相対パスに注意
 import { UserMountainRecord, RecordList } from "./user_mountain.js"; // 相対パスに注意
-import $ from "jquery";
 
 
 export class UserMountainCount {
