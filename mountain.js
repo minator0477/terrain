@@ -1,5 +1,4 @@
 import { RecordList } from "./user_mountain.js"; // 相対パスに注意
-import $ from "jquery";
 export class Mountain {
     constructor({No, name, latitude, longitude, yomi, elevation, prefecture, region, remarks}){
         this.No = No;
