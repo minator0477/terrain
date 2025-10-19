@@ -1,0 +1,170 @@
+[
+  {
+    "recordId": "1",
+    "date": "2019/05/03",
+    "summitId": "44",
+    "mountainId": "筑波山",
+    "journeyId": "1",
+    "remarks": null
+  },
+  {
+    "recordId": "2",
+    "date": "2019/09/05",
+    "summitId": "87",
+    "mountainId": "白山",
+    "journeyId": "2",
+    "remarks": null
+  },
+  {
+    "recordId": "3",
+    "date": "2019/09/02",
+    "summitId": "79",
+    "mountainId": "鳳凰山",
+    "journeyId": "3",
+    "remarks": null
+  },
+  {
+    "recordId": "4",
+    "date": "2019/08/25",
+    "summitId": "24",
+    "mountainId": "那須岳",
+    "journeyId": "4",
+    "remarks": null
+  },
+  {
+    "recordId": "5",
+    "date": "2019/10/06",
+    "summitId": "28",
+    "mountainId": "燧ヶ岳",
+    "journeyId": "5",
+    "remarks": null
+  },
+  {
+    "recordId": "6",
+    "date": "2019/11/23",
+    "summitId": "146",
+    "mountainId": "三ッ峠山",
+    "journeyId": "6",
+    "remarks": null
+  },
+  {
+    "recordId": "7",
+    "date": "2019/12/08",
+    "summitId": "145",
+    "mountainId": "大岳山",
+    "journeyId": "7",
+    "remarks": null
+  },
+  {
+    "recordId": "8",
+    "date": "2023/10/14",
+    "summitId": "30",
+    "mountainId": "谷川岳",
+    "journeyId": "8",
+    "remarks": null
+  },
+  {
+    "recordId": "9",
+    "date": "2024/08/06",
+    "summitId": "74",
+    "mountainId": "木曽駒ヶ岳",
+    "journeyId": "9",
+    "remarks": null
+  },
+  {
+    "recordId": "10",
+    "date": "2024/08/25",
+    "summitId": "72",
+    "mountainId": "富士山",
+    "journeyId": "10",
+    "remarks": null
+  },
+  {
+    "recordId": "11",
+    "date": "2024/09/14",
+    "summitId": "78",
+    "mountainId": "仙丈ヶ岳",
+    "journeyId": "11",
+    "remarks": null
+  },
+  {
+    "recordId": "12",
+    "date": "2024/12/14",
+    "summitId": "145",
+    "mountainId": "大岳山",
+    "journeyId": "12",
+    "remarks": null
+  },
+  {
+    "recordId": "13",
+    "date": "2023/09/16",
+    "summitId": "29",
+    "mountainId": "至仏山",
+    "journeyId": "13",
+    "remarks": null
+  },
+  {
+    "recordId": "14",
+    "date": "2024/05/26",
+    "summitId": "235",
+    "mountainId": "大山",
+    "journeyId": "14",
+    "remarks": null
+  },
+  {
+    "recordId": "15",
+    "date": "2019/03/31",
+    "summitId": "236",
+    "mountainId": "金時山",
+    "journeyId": "15",
+    "remarks": "高校３年時春山"
+  },
+  {
+    "recordId": "17",
+    "date": "2019/03/31",
+    "summitId": "55",
+    "mountainId": "奥穂高",
+    "journeyId": "16",
+    "remarks": "高校２年の夏山"
+  },
+  {
+    "recordId": "18",
+    "date": "2019/03/31",
+    "summitId": "160",
+    "mountainId": "大天井岳",
+    "journeyId": "17",
+    "remarks": "高校１年の夏山"
+  },
+  {
+    "recordId": "19",
+    "date": "2019/03/31",
+    "summitId": "56",
+    "mountainId": "常念岳",
+    "journeyId": "17",
+    "remarks": "高校１年の夏山"
+  },
+  {
+    "recordId": "20",
+    "date": "2025/08/23",
+    "summitId": "69",
+    "mountainId": "瑞牆山",
+    "journeyId": "18",
+    "remarks": null
+  },
+  {
+    "recordId": "21",
+    "date": "2025/08/24",
+    "summitId": "68",
+    "mountainId": "金峰山",
+    "journeyId": "18",
+    "remarks": null
+  },
+  {
+    "recordId": "22",
+    "date": "2021/12/05",
+    "summitId": "145",
+    "mountainId": "大岳山",
+    "journeyId": "19",
+    "remarks": null
+  }
+]
