@@ -9,8 +9,7 @@
   </head>
   <body style="margin:0">
     <div id="map" style="height:100vh; position: relative; z-index: 1;"><!-- 地図描画用のdiv要素を作成 -->
-		<!-- 地図の凡例 -->
-        <div id="my-control-container" style="position:absolute; top:10px; left:10px; z-index:1; background: rgba(255, 255, 255, 1.0)">
+        <div id="my-control-container" style="position:absolute; top:10px; left:10px; z-index:1; background: rgba(255, 255, 255, 1.0); padding: 10px; border: 1px solid #aaa; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">
             <h2 style="margin:0; padding:0">  MENU</h2>
             <div class="header">
                 <h3 style="margin:0; padding:0;"> &#8801; 背景地図</h3>
@@ -26,20 +25,22 @@
                 <h3 style="margin:0; padding: 0;"> &#8801; 期間</h3>
             </div>
             <div id="meizan-period-container" style="background: rgba(255, 255, 255, 1.0); display: none;">
-                <label for="start">Start date:</label>
+                <label for="start">開始日:</label>
                 <input
                     type="date"
                     id="start-date"
                     value="2000-01-01"
                     style="width: 120px; height: 0.8em;"
+                    class="date-input"
                  />
                 <br>
-                <label for="end">End date:</label>
+                <label for="end">終了日:</label>
                 <input
                     type="date"
                     id="end-date"
                     value="2099-12-31"
                     style="width: 120px; height: 0.8em;"
+                    class="date-input"
                  />
             </div>
         </div>

@@ -25,6 +25,6 @@ import {setControl } from "./control.js"
 console.log("aa");
 const map = initMap();
 addLoadedEvent(map);
-setControl();
+setControl(map);
 // setupLegendToggle();
 

@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css'
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 // OpacityControlプラグインの読み込み
 import OpacityControl from 'maplibre-gl-opacity';
@@ -27,16 +27,17 @@ function removeLayerIfExists(map, layerId) {
 
 
 // マップの初期ロード完了時に発火するイベントを検知する
-async function addMeizan(map) {
+export async function addMeizan(map, geojson) {
     // ソース・レイヤーの有無をチェックし、既にあるものを削除
-    removeSourceIfExists(map, 'meizan');
     removeLayerIfExists(map, 'meizan-class-layer');
     removeLayerIfExists(map, 'meizan-elevation-layer');
     removeLayerIfExists(map, 'meizan-count-layer');
+    removeSourceIfExists(map, 'meizan');
 
     // ソース・レイヤー追加
-    const geojson = await makeMountainList();
-    // console.log(geojson);
+    const start = new Date("2000-01-01");
+    const end = new Date("2099-12-31");
+    // const geojson = await makeMountainList();
     // ◯百名山ソース追加
     map.addSource('meizan', {
         type: 'geojson',
@@ -484,7 +485,7 @@ function switchLayer(map) {
   }
 
 
-async function makeMountainList() {
+export async function makeMountainList(startDate, endDate) {
     const name = "mineta";
     try {
         const records = await loadRecords(name);
@@ -492,13 +493,7 @@ async function makeMountainList() {
         const meizans = await loadMountains();
         // console.log("Loaded meizans:", meizans);
 
-        const start = new Date("2019-04-01");
-        const end = new Date("2025-12-31");
-        const filteredRecords = records.filterByDate(start, end);
-
-        // console.log(meizans.mountains[0]);
-        // const meizanCount = new UserMountainCount(meizans.mountains[0], 3);
-        // console.log(meizanCount);
+        const filteredRecords = records.filterByDate(startDate, endDate);
 
         const userMountainCountList =  new UserMountainCountList(meizans, filteredRecords);
         
@@ -511,10 +506,13 @@ async function makeMountainList() {
 
 
 
-export function addLoadedEvent(map) {
+export async function addLoadedEvent(map) {
 
-    map.on('load', () => {
-        addMeizan(map);
+    map.on('load', async() => {
+        const startDate = new Date("2000-01-01");
+        const endDate = new Date("2099-12-31");
+        const geojson = await makeMountainList(startDate, endDate); //名山のGeoJSONを取得
+        addMeizan(map, geojson); //名山ソース、名山ソースを追加
         addTrackSource(map);
         addTrackLayer(map);
         addTerrainSource(map);
@@ -522,15 +520,15 @@ export function addLoadedEvent(map) {
         addClickEvent(map);
 
 
-    // 4️⃣ 地図ロード後にコントロールを任意のdivに追加
-    const layerControlBasemap = new BasemapLayerControl(basemapLayers);
-    const containerBasemap = document.getElementById("basemap-control-container");
-    containerBasemap.appendChild(layerControlBasemap.onAdd(map));
+        // 4️⃣ 地図ロード後にコントロールを任意のdivに追加
+        const layerControlBasemap = new BasemapLayerControl(basemapLayers);
+        const containerBasemap = document.getElementById("basemap-control-container");
+        containerBasemap.appendChild(layerControlBasemap.onAdd(map));
 
-    const layerControlMeizan = new MeizanLayerControl(meizanLayers);
-    const containerMeizan = document.getElementById("meizan-control-container");
-    containerMeizan.appendChild(layerControlMeizan.onAdd(map));
-    // console.log(layerControlMeizan.setLegend("meizan-elevation-layer", "legend-section"));
+        const layerControlMeizan = new MeizanLayerControl(meizanLayers);
+        const containerMeizan = document.getElementById("meizan-control-container");
+        containerMeizan.appendChild(layerControlMeizan.onAdd(map));
+        // console.log(layerControlMeizan.setLegend("meizan-elevation-layer", "legend-section"));
 
         // 3D表示の切り替え
         map.addControl(
