@@ -20,8 +20,11 @@ import { UserMountainRecord, loadRecords, RecordList } from "./user_mountain.js"
 import { Mountain, loadMountains, MountainList } from "./mountain.js"; // 相対パスに注意
 import { UserMountainCount, UserMountainCountList } from "./user_count.js"; // 相対パスに注意
 
+import {setControl } from "./control.js"
+
 console.log("aa");
 const map = initMap();
 addLoadedEvent(map);
+setControl();
 // setupLegendToggle();
 

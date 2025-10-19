@@ -12,10 +12,29 @@ import { UserMountainRecord, loadRecords, RecordList } from "./user_mountain.js"
 import { Mountain, loadMountains, MountainList } from "./mountain.js"; // 相対パスに注意
 import { UserMountainCount, UserMountainCountList } from "./user_count.js"; // 相対パスに注意
 
+function removeSourceIfExists(map, sourceId) {
+    if (map.getSource(sourceId)) {
+        map.removeSource(sourceId);
+    }
+}
+
+
+function removeLayerIfExists(map, layerId) {
+    if (map.getLayer(layerId)) {
+        map.removeLayer(layerId);
+    }
+ }
 
 
 // マップの初期ロード完了時に発火するイベントを検知する
 async function addMeizan(map) {
+    // ソース・レイヤーの有無をチェックし、既にあるものを削除
+    removeSourceIfExists(map, 'meizan');
+    removeLayerIfExists(map, 'meizan-class-layer');
+    removeLayerIfExists(map, 'meizan-elevation-layer');
+    removeLayerIfExists(map, 'meizan-count-layer');
+
+    // ソース・レイヤー追加
     const geojson = await makeMountainList();
     // console.log(geojson);
     // ◯百名山ソース追加
@@ -43,6 +62,7 @@ async function addMeizan(map) {
             'circle-stroke-width': 1,
             'circle-opacity': 1.0
         },
+        layout: { visibility: 'none', },
     });
 
     // ○百名山（標高）レイヤー追加
@@ -97,7 +117,6 @@ async function addMeizan(map) {
                 1000, '#f03b20',    // 5 <= # < 1000
             ],
         },
-        layout: { visibility: 'none', },
     });
 }
 
@@ -107,7 +126,7 @@ function addTrackSource(map) {
     // trackソース追加
     map.addSource('track', {
         type: 'geojson',
-        data: '/data/track/geojson/tracks.geojson'
+        data: '/tracks.geojson'
     });
 }
 
@@ -230,10 +249,10 @@ function addClickEvent(map){
             let html_str = null;
             if (layerId != 'track-layer'){
                     html_str = `
-                            <div>山名： <strong>${feature.properties.山名}</strong> </div>
-                            <div>標高： <strong>${feature.properties.標高}</strong>[m] </div>
-                            <div>種別： <strong>${feature.properties.クラス}</strong> </div>
-                            <div>カウント： <strong>${feature.properties.カウント}</strong> </div>
+                            <div>山名： <strong>${feature.properties.name}</strong> </div>
+                            <div>標高： <strong>${feature.properties.elevation}</strong>[m] </div>
+                            <div>種別： <strong>${feature.properties.classname}</strong> </div>
+                            <div>カウント： <strong>${feature.properties.count}</strong> </div>
                     `;
             }else{
                     html_str = `
@@ -285,9 +304,9 @@ function switchLayer(map) {
 
   // 3️⃣ レイヤー情報を定義
       const meizanLayers = [
+        { value: "meizan-count-layer", label: "登頂回数" },
         { value: "meizan-class-layer", label: "百/二百/三百名山" },
         { value: "meizan-elevation-layer", label: "標高" },
-        { value: "meizan-count-layer", label: "登頂回数" }
       ];
       const basemapLayers = [
         { value: "std-layer", label: "地理院標準地図" },
@@ -496,13 +515,8 @@ export function addLoadedEvent(map) {
 
     map.on('load', () => {
         addMeizan(map);
-        // addMeizanSource(map);
-        // addMeizanLayer(map);
         addTrackSource(map);
         addTrackLayer(map);
-        // addControlBaselayer(map);
-        // switchLayer(map);
-        // addControlMeizanlayer(map);
         addTerrainSource(map);
         addTerrainLayer(map);
         addClickEvent(map);

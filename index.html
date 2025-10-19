@@ -12,63 +12,60 @@
 		<!-- 地図の凡例 -->
         <div id="my-control-container" style="position:absolute; top:10px; left:10px; z-index:1; background: rgba(255, 255, 255, 1.0)">
             <h2 style="margin:0; padding:0">  MENU</h2>
-            <div class="">
+            <div class="header">
                 <h3 style="margin:0; padding:0;"> &#8801; 背景地図</h3>
             </div>
-            <div id="basemap-control-container"></div>
+            <div id="basemap-control-container" style="display: none;"></div>
             <hr>
-            <div class="">
+            <div class="header">
                 <h3 style="margin:0; padding: 0;"> &#8801; 名山で可視化したい情報</h3>
             </div>
-            <div id="meizan-control-container"></div>
+            <div id="meizan-control-container" style="display: none;"></div>
+            <hr>
+            <div class="header">
+                <h3 style="margin:0; padding: 0;"> &#8801; 期間</h3>
+            </div>
+            <div id="meizan-period-container" style="background: rgba(255, 255, 255, 1.0); display: none;">
+                <label for="start">Start date:</label>
+                <input
+                    type="date"
+                    id="start-date"
+                    value="2000-01-01"
+                    style="width: 120px; height: 0.8em;"
+                 />
+                <br>
+                <label for="end">End date:</label>
+                <input
+                    type="date"
+                    id="end-date"
+                    value="2099-12-31"
+                    style="width: 120px; height: 0.8em;"
+                 />
+            </div>
         </div>
 
-			<div class="legend-container" style="position: absolute; bottom: 10px; left: 10px; z-index: 99; background: rgba(255, 255, 255, 0.9); padding: 10px; border: 1px solid #aaa; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); fontsize: 14px">
+        <div class="legend-container" style="position: absolute; bottom: 10px; left: 10px; z-index: 99; background: rgba(255, 255, 255, 0.9); padding: 10px; border: 1px solid #aaa; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); fontsize: 14px">
             <h2 style="padding:0; margin:0;">凡例</h2>
-				<div id="legend-section">
-					<div class="legend-header"><strong>分類</strong></div>
-					<div class="legend-body">
-						<span style="color:red;">●</span> 百名山<br>
-						<span style="color:blue;">●</span> 二百名山<br>
-						<span style="color:green;">●</span> 三百名山<br>
-					</div>
-				</div>
-				<hr>
+            <div id="legend-section">
+                <div class="legend-header"><strong>登頂回数</strong></div>
+                <div class="legend-body">
+                    <span style="color:gray;">●</span> 0<br>
+                    <span style="color:#6baed6;">●</span> 1<br>
+                    <span style="color:#2171b5;">●</span> 2<br>
+                    <span style="color:#bbdf26;">●</span> 3<br>
+                    <span style="color:#fdae61;">●</span> 4<br>
+                    <span style="color:#f03b20;">●</span> 5以上
+                </div>
+            </div>
+            <hr>
 
-<!--
-				<div class="legend-section">
-					<div class="legend-header"><strong>標高 ▼</strong></div>
-					<div class="legend-body">
-						<span style="color:gray;">●</span> 0m<br>
-						<span style="color:#2c7fb8;">●</span> 500m<br>
-						<span style="color:#41ab5d;">●</span> 1000m<br>
-						<span style="color:#fdae61;">●</span> 1500m<br>
-						<span style="color:#f46d43;">●</span> 2000m<br>
-						<span style="color:#d73027;">●</span> 3000m以上
-					</div>
-				</div>
-				<hr>
+            <div class="legend-item" style="display: flex; align-items: center; gap: 8px; font-size:14px;">
+            <div class="legend-line" style="width: 30px; height: 2px; background-color: red"></div>
+                <span>トラック</span>
+            </div>
+        </div>
 
-				<div class="legend-section">
-					<div class="legend-header"><strong>カウント ▼</strong></div>
-					<div class="legend-body">
-						<span style="color:gray;">●</span> 0<br>
-						<span style="color:#6baed6;">●</span> 1<br>
-						<span style="color:#2171b5;">●</span> 2<br>
-						<span style="color:#bbdf26;">●</span> 3<br>
-						<span style="color:#fdae61;">●</span> 4<br>
-						<span style="color:#f03b20;">●</span> 5以上
-					</div>
-				</div>
-				<hr>
--->
-				<div class="legend-item" style="display: flex; align-items: center; gap: 8px; font-size:14px;">
-					<div class="legend-line" style="width: 30px; height: 2px; background-color: red"></div>
-					<span>トラック</span>
-				</div>
-			</div>
-
-		</div>
+        </div>
 
     <script type="module" src="main.js"></script>
   </body>

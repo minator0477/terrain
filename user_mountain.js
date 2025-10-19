@@ -24,7 +24,6 @@ export class RecordList {
     }
 
     filterByDate(startDate, endDate){
-        console.log(startDate, endDate);
         const filteredRecords = this.records.filter(record => {
             const day = record.date;
             return day >= startDate && day <= endDate
