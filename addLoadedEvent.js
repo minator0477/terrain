@@ -13,17 +13,18 @@ import { Mountain, loadMountains, MountainList } from "./mountain.js"; // 相対
 import { UserMountainCount, UserMountainCountList } from "./user_count.js"; // 相対パスに注意
 
 
+
 // マップの初期ロード完了時に発火するイベントを検知する
-function addMeizanSource(map) {
+async function addMeizan(map) {
+    const geojson = await makeMountainList();
+    // console.log(geojson);
     // ◯百名山ソース追加
     map.addSource('meizan', {
         type: 'geojson',
-        data: '/data/meizan/geojson/meizan.geojson'
+        // data: '/data/meizan/geojson/meizan.geojson'
+        data: geojson
     });
-}
 
-
-function addMeizanLayer(map) {
     // ○百名山クラス追加（種別）
     map.addLayer({
         id: 'meizan-class-layer',
@@ -33,9 +34,9 @@ function addMeizanLayer(map) {
             'circle-radius': 5,
             'circle-color': [
                 'case',
-                ['==', ['get', 'クラス'], '百名山'], 'red',
-                ['==', ['get', 'クラス'], '二百名山'], 'blue',
-                ['==', ['get', 'クラス'], '三百名山'], 'green',
+                ['==', ['get', 'classname'], '百名山'], 'red',
+                ['==', ['get', 'classname'], '二百名山'], 'blue',
+                ['==', ['get', 'classname'], '三百名山'], 'green',
                 'gray'
             ],
             'circle-stroke-color': 'white',
@@ -55,7 +56,7 @@ function addMeizanLayer(map) {
             'circle-color': [
                 'interpolate',
                 ['linear'],
-                ['to-number', ['get', '標高'], 0],  // ← 文字列から数値へ変換、失敗時は 0
+                ['to-number', ['get', 'elevation'], 0],  // ← 文字列から数値へ変換、失敗時は 0
                 0, 'gray',       // 0m 以下：青緑
                 500,  '#2c7fb8',     // 500m：水色
                 1000, '#41ab5d',    // 1000m：青
@@ -87,7 +88,7 @@ function addMeizanLayer(map) {
             'circle-color': [
                 'interpolate',
                 ['linear'],
-                ['to-number', ['get', 'カウント'], 0],  // ← 文字列から数値へ変換、失敗時は 0
+                ['to-number', ['get', 'count'], 0],  // ← 文字列から数値へ変換、失敗時は 0
                 0,    'gray',       //      # < 1
                 1,    '#6baed6',    // 1 <= # < 2
                 2,    '#2171b5',    // 2 <= # < 3
@@ -98,7 +99,8 @@ function addMeizanLayer(map) {
         },
         layout: { visibility: 'none', },
     });
-}       
+}
+
 
 
 function addTrackSource(map) {
@@ -463,7 +465,7 @@ function switchLayer(map) {
   }
 
 
-async function main() {
+async function makeMountainList() {
     const name = "mineta";
     try {
         const records = await loadRecords(name);
@@ -480,7 +482,8 @@ async function main() {
         // console.log(meizanCount);
 
         const userMountainCountList =  new UserMountainCountList(meizans, filteredRecords);
-        console.log(userMountainCountList.convertToGeoJSON());
+        
+        return userMountainCountList.convertToGeoJSON();
 
     } catch (err) {
         console.error(err);
@@ -491,10 +494,10 @@ async function main() {
 
 export function addLoadedEvent(map) {
 
-    main();
     map.on('load', () => {
-        addMeizanSource(map);
-        addMeizanLayer(map);
+        addMeizan(map);
+        // addMeizanSource(map);
+        // addMeizanLayer(map);
         addTrackSource(map);
         addTrackLayer(map);
         // addControlBaselayer(map);
